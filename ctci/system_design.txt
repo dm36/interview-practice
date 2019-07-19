@@ -1,0 +1,156 @@
+https://www.youtube.com/channel/UCn1XnDWhsLS5URXTi5wtFTA/videos?view=0&sort=p&flow=grid
+
+- communicate- engage interviewer, ask them questions, be open about issues
+- go broad first- don't dive straight into the algorithm or get focused on one part
+- use whiteboard- draw a picture of what you're proposing
+- acknowledge interviewer concerns- don't brush them off, validate them, make changes accordingly
+- careful about assumptions- incorrect assumption can change the problem-
+system produces analytics, statistics for a dataset, matters whether those analytics are up to date
+- explicit about assumptions- state assumptions, interviewer will correct you if you're mistaken
+- estimate when necessary- estimate how much space it will take to store all the URL's
+- drive- candidate- stay in the driver's seat- drive questions, ask questions, be open about tradeoff, go deeper,
+make improvements
+
+- manager asked you to design a system like tinyURL wouldn't just go lock yourself in the office and design
+it by yourself- you would have a lot more questions than that before you start designing it
+- scope the problem- what exactly is needed to be implemented- can the user choose between
+their short URL's, will they be auto-generated, will you keep track of stats on the clicks, should
+the URL's stay alive forever or do they have a timeout
+- tiny url => shortening a url to a tiny url, analytics for a url, retrieving the url associated with a tinyurl,
+user accounts and link management
+- make assumptions like max of one million new URLs a day, data can be stale by a max of 10 minutes
+- draw major components- frontend server that pulls from backend's data store, another set of servers
+that crawl the internet for some data and another for analytics
+- user enters a URL- then what happens?
+- identify key issues- what are the bottlenecks or major challenges
+- some URLs will be infrequently accessed others, others can suddenly peak, URL is posted on reddit
+don't want to constantly hit the db
+- adjust your design for key issues- major redesign or minor tweaking like
+a cache, be open about design limitations
+- not asked to design a system but a feature or algorithm in a simple, scalable way
+- ask questions- details interviewer left out
+- make believe- pretend data can fit all one machine with no memory limitations
+- get real- figure out how to logically divide the data up- and how one machine would
+identify where to look up a different piece of data
+-solve problems- remove issue or mitigate, can continue using the approach in step 2, iterative
+approach, solved problems from step 3, new problems emerged
+- not to rearchitect a complex system but demonstrate can analyse and solve problems, poke holes
+in your solution
+
+key concepts-
+- horizontal vs. vertical scaling- vertical- increasing resources of a specific node- additional memory to a server
+to improve ability to handle load changes
+- horizontal- increasing number of nodes- add additional servers, decrease load of any one server
+-vertical is easier than horizontal but limited- can only add so much memory or disk space
+
+Load Balancer-
+- frontends of a scalable website thrown behind a load balancer
+- distribute the load evenly so that one server doesn't crash and take down the whole system
+- build out a network of cloned servers that have essentially the same code and access to data
+
+Database Normalization and noSQL
+
+- denormalization- adds redundant information into a database to speed up reads- store
+project name within task table so that you don't have to join the product and task tables
+
+- noSQL database does not support joins- and structures data differently, more designed for
+scale
+
+- sharding- split data across multiple machines while ensuring you have a way of figuring out
+which data is on which machine
+- vertical partitioning- partition by feature- social network- one partition for tables
+related to profiles, another for messages, and so on
+- one of these tables gets very large- might need to repartition that database
+- key based partitioning- some part of the data (ID) to partition-
+allocate n servers and put the data on mod(key, n), # of servers you have
+is effectively fixed
+- adding additional servers means reallocating all the data, expensive
+task
+- directory based partitioning- lookup table for where data can be found-
+relatively easy to add additional servers- two major drawbacks
+- lookup table can be a single point of failure, constantly accessing this
+table impacts performance
+- a lot of architectures use multiple partitioning schemes
+
+- caching- in memory cache- rapid results, key-value pairing, sits between
+application layer and data store
+- application requests piece of information- tries cache- if cache does not contain key
+looks up the data in the data store
+- cache a query and its results directly- or cache specific object- rendered version of
+a part of the website, list of most recent blog posts
+
+- asynchronous processing and queues- slow operations done async, otherwise user will
+get stuck waiting on a process to complete
+- in advance- queue of jobs to be done that update part of website, forum- one job- re-render a
+page that lists the most popular posts and # of comments
+- tell the user to wait and notify them when the process is done- enabled
+some new part of a website and it needs a few minutes to import data, notify when done
+
+Networking Metrics
+- bandwidth- max amount of data that can bet transferred in a unit of time, bits per second
+- throughput- actual amount of data that is transferred
+- latency- how long it takes data to go from one end to another, delay between sender
+sending info and receiver receiving it
+- conveyor belt- latency time to go from one side to another throughput- number of items
+that roll off the conveyor belt
+- fatter belt- not change latency- change throughput and bandwith
+- shortening belt- decrease latency- items spend less time in transit, won't change throughput
+or bandwidth
+- faster conveyor belt will change all three- time to travel across factory decreases, more items
+will roll off the belt per unit of time
+- bandwidth- number of items that can be transferred per unit time- in best conditions,
+throughput is the time it really takes when machines aren't operating smoothly
+- latency- big deal when playing games- notified of opponent's movement
+
+- map reduce- map step and reduce step, map emits a (key, value) pair
+- reduce takes a key and a set of values and reduces them in some way emitting a new key and value, might
+be fed back into the reduce program for more reducing
+- MapReduce allows us to do a lot of processing in parallell
+
+- failures- any part of the system can fail, need to plan for failures
+- availability- function of the % of the time the system is operational, reliability is
+a function of the prob that the system is operational for a certain unit of time
+- read-heavy, write-heavy- lots of reads or writes impacts design, write-heavy- queue up the
+writes, read-heavy, want to cache
+- security- issues a system can face and work around these
+
+- no single design that works perfectly- tradeoffs- understand use cases, scope a problem,
+make a reasonable assumption, create a solid design, be open about the design's weaknesses
+
+- Example problem:
+- list of millions of documents- how would you find all documents that contain a list of
+words, words can appear in any order but must be complete, book does not match bookkeeper
+- findWords many times for same set of documents- can accept burden of pre-processing
+
+- if we had a few dozen documents- how would we implement findWords
+- for each word find all the documents that it's contained in and then take the
+intersections of these documents across the list of words to find the documents that
+list of words are in
+- for example
+"books" -> {doc2, doc3, doc6, doc8}
+"many"  -> {doc1, doc3, doc7, doc8, doc9}
+- many books would be in {doc3, doc8}
+- how would we find the set of documents that a word is contained in? we could do membership
+checking- i.e. check if the word is contained in that document- the word being a string
+the document being an array of words- but that would be O(n)- if however for each document
+we had a dictionary mapping each word to its count- checking whether a word is in that document
+would now just be O(1)
+https://stackoverflow.com/questions/17539367/python-dictionary-keys-in-complexity
+- how to divide the documents across many machines- because of # of words and
+repetition of words in a document- many not be able to fill the full hash table on a machine
+- divide hash table by keyword- given machine contains the full document list for a given word
+- divide by document such that machine contains the keyword mapping for a subset of the documents
+
+- divide the words alphabetically by keyword- each machine controls a range of words
+- iterate through the keywords alphabetically- storing as much data as possible on one machine-
+when a machine is full move on to the next machine
+- lookup table is small and simple- each machine can store a copy of the lookup table
+- disadvantage is if new documents are added- need to perform an expensive shift of keywords
+- find all documents that match a list of strings- sort the list and then send each machine
+a lookup request for the strings that the machine owns
+- if the string is "after builds boat amaze banana"- machine 1 would get a lookup request
+for {"after", "amaze"}, machine 3 gets a lookup request for {"banana", "boat", "builds"}
+- machine 1 would look up all documents containing after and amaze- and perform an intersection
+on these document lists, machine 3 would do the same for {"banana", "boat", "builds"} and
+intersect these lists as well
+- intersection on lists from document 1 and document 3

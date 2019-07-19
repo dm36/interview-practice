@@ -1,0 +1,59 @@
+https://www.youtube.com/watch?v=COk73cpQbFQ
+- O(nlogn) in average and O(n^2) in worst case
+- Fast and efficient in practical scenarios- randomized version of quick
+sort
+- O(nlogn) w/ high probability
+- Sort function in a lot of libraries is quick sort
+- Select one of the elements in the list- call this pivot
+- Rearrange the list so that all the elements that are less than the pivot
+are to the left of it, all the elements that are greater than the pivot are to the
+right
+- Two sub-problems- sorting the segment of the array to the left of the pivot
+and the segment of the array to the right of the pivot
+- Sort the sub-list to the left of the pivot and to the right of the pivot
+- One element- stop recursion
+- Function called quick sort- array and start and end of the array that is to be sorted
+- Boundaries of the segment- start index 0, partition array, start and end
+- Partition rearranges arrays so that everything to the left of the pivot is less than the pivot
+everything greater than the pivot is to the right
+- Order of the elements to the left and to the right are unimportant only that they are situated
+to the left or the right
+- Can work on the same array rather than auxiliary arrays
+- We then sort the sublist to the left of the partition and to the right of the partition, by repeating
+the partition step
+- two recursive calls to sort the segment to the left of the partition index and to the right
+of the partition index
+- Base condition if a segment only has one element, if start >= end- return, segment is invalid
+or just one element will exit
+- Only do the partition if start < end- same thing
+- Partition returns the index of the partition
+- Partition would take the array, the start index and the end index
+- set pivot to be the element at the end of the array
+- have pIndex point to the start of the array
+- loop over elements from the start to end - 1, and if the element is less than or equal
+to the pivot, swap the element and the element at the pivot index, and then increment
+the pivot index
+- Also need to swap the element at the pivot index with the end of the array, return pindex
+- best seen with an example so:
+[7, 2, 1, 6, 8, 5, 3, 4]
+
+- pindex starts at 0 and points to 7
+- pivot is array[end] or 4
+- 7 is not <= 4, so we increment i
+- 2 is <= 4, so we swap 7 and 2, increment pindex to 1, and i is now at 2 pointing to the 1
+
+[2, 7, 1, 6, 8, 5, 3, 4]
+
+- pindex is now at 1, pointing to the 7, i is now at 2 pointing to the one, pivot is 4
+- 2 is less than 4, so we swap the 1 and the 4, increment pindex and increment i
+
+[2, 1, 7, 6, 8, 5, 3, 4]
+- pindex is now at 2, pointing to the 7, i is now at 3 pointing to the 6, pivot is 4
+- Increment i until we reach the 3 and then swap the 7 and the 3, and increment pindex so it's now pointing at 6
+
+[2, 1, 3, 6, 8, 5, 7, 4]
+- We've now reached the end of the for loop!
+
+So now we swap the element at partition index with the element at the end so that we now
+have:
+[2, 1, 3, 4, 8, 5, 7, 6]

@@ -1,0 +1,43 @@
+https://www.ics.uci.edu/~pattis/ICS-33/lectures/complexitypython.txt
+
+Space Complexity
+- Space complexity- total size of any new variables we're allocating
+- Additional space- don't include space taken by inputs
+
+Dynamic Arrays
+-Lists in python
+-Underlying static array
+-If we have 10 indices and we append four items to the array- we say it
+has a length of 4, but an underlying array of length 10
+-So we say its size is 4 and capacity 10
+-Dynamic array stores an end index to keep track of where dynamic array ends and
+extra capacity begins
+-At some point you'll use the full capacity fo the array- next time when you append
+
+Arrays
+- Lookup is only O(1)- because you just gotta add the starting address of the array
+to the index (and account for size of each item in bytes)
+- Appends are O(1) because you're tracking the end_index and you just gotta put
+an element after that- until you reach the capacity at which point you gotta
+create more space- so amortized O(1)- doubling takes O(n) but number of O(1) appends
+until your next doubling also doubles
+- Inserts and deletes are expensive- because you got to scoot over other elements which
+is why insert and deletes are O(n)- if you insert into the 0th index- prepend
+have to scoot over everything
+- Delete- have to scoot up all other elements- can't leave the gap otherwise
+we can't predict where our elements are
+- Slicing allocates a new list- copies elements from the original list to the new list
+so runtime is O(n) and O(n) space, where n is # of elements in the resulting list
+- In-place- 0 space, but has side effects- can alter code outside of your function
+
+original_list = [2, 3, 4, 5]
+squared_list  = square_list_in_place(original_list)
+
+print "squared: %s" % squared_list
+# Prints: squared: [4, 9, 16, 25]
+
+print "original list: %s" % original_list
+# Prints: original list: [4, 9, 16, 25], confusingly!
+
+# And if square_list_in_place() didn't return anything,
+# which it could reasonably do, squared_list would be None!
